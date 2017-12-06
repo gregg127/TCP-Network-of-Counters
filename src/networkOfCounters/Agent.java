@@ -55,7 +55,7 @@ public class Agent {
 	 * @throws InterruptedException 
 	 */
 	public Agent(long initCounterVal, int introAgentPort) throws IOException, ClassNotFoundException, InterruptedException {
-		serverSocket = new ServerSocket(0);
+		serverSocket = new ServerSocket(0); // finds first free port
 		port = serverSocket.getLocalPort();
 		counterValue = initCounterVal;
 		agentsAddressesAndPorts = new ArrayList<>();
@@ -65,13 +65,17 @@ public class Agent {
 		initAgentServerThread();
 		start(); // runs threads
 		appendToLogActivity(info() + "Created with introducing agent on port: " + introAgentPort);
+		addAgentToNetwork(introAgentPort);
+	}
+
+	private void addAgentToNetwork(int introAgentPort) throws IOException, ClassNotFoundException, InterruptedException {
 		agentsAddressesAndPorts = getAgentListFromIntroAgent(introAgentPort); // NET - sets agents list - SHORTEN
 		agentsAddressesAndPorts.add(IPAddress+":"+introAgentPort); // adds introducing agent to list
 		sendIPAndPortToOtherAgents(); // UPD - sends to each agent IP address and port
 		counterValue = getAverageOfCounterValue(); //CLK - sets counterValue to average of all agents' counters in the network
 		synchronizeCounters(); // SYN - sends to every agent SYN flag, which synchronizes counters
 	}
-	
+
 	/**
 	 * Creates agent-server thread responsible for accepting connections and processing requests
 	 */
@@ -90,7 +94,7 @@ public class Agent {
 	}
 
 	/**
-	 * Processes socket connection?
+	 * Answers to received data on given socket
 	 * @param socket
 	 * @throws IOException
 	 * @throws InterruptedException
@@ -133,7 +137,6 @@ public class Agent {
 		appendToLogActivity("\t" + info() + "Connection finished with: " + clientData);
 		socket.close();
 	}
-
 
 	/** 
 	 * Sends NET flag to introducing agent
@@ -254,17 +257,6 @@ public class Agent {
 	}
 
 	/**
-	 * Sets counter value and synchronizes all agents' counter
-	 * @param milliseconds
-	 * @throws UnknownHostException
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public void setCounter(long milliseconds) throws IOException, InterruptedException {
-		counterValue = milliseconds;
-	}
-	
-	/**
 	 * Initializes thread that increases counter every millisecond while keepProcessing is true
 	 */
 	private void initTimerThread() {
@@ -272,7 +264,7 @@ public class Agent {
 			try {
 				while(keepProcessing) {
 					counterValue++;
-						Thread.sleep(1);
+					Thread.sleep(1);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

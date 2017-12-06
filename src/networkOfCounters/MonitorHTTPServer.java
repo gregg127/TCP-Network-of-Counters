@@ -78,7 +78,7 @@ public class MonitorHTTPServer {
 	}
 
 	private static boolean isRequestEmpty(String request) {
-		return request == null || request.length() < EMPTY_GET_APPROX_LENGTH;
+		return request == null || request.length() <=	 EMPTY_GET_APPROX_LENGTH;
 	}
 
 	/**
@@ -137,7 +137,6 @@ public class MonitorHTTPServer {
 			}
 		}
 	}
-
 	private static void processDELRequest(String value) throws IOException, InterruptedException {
 		Agent agentToDelete = null;
 		for(Agent a : agents) {
@@ -160,9 +159,10 @@ public class MonitorHTTPServer {
 	private static void processAgentActionRequest(String value) throws IOException {
 		if(value.equals("addFirstAgent") && agents.isEmpty()) {
 			displayServerInfo("Adding first agent in the network");
-			agents.add(new Agent());	
+			agents.add(new Agent());
 		} else if(value.equals("toggle")) {
 			toggleLogMessages();
+			displayServerInfo("Toggled logs");
 		}
 	}
 
@@ -189,7 +189,7 @@ public class MonitorHTTPServer {
 			return ; // counter value not set
 		} else {
 			String[] data = agentAddValue.split(":");
-			displayServerInfo("Adding new agent");
+			displayServerInfo("Adding new agent with intro agent on port " + data[1]);
 			agents.add(new Agent(Long.parseLong(timerValue),Integer.parseInt(data[1])));
 		}
 	}
