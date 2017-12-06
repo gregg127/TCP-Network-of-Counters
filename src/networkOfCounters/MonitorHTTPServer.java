@@ -118,7 +118,7 @@ public class MonitorHTTPServer {
 	 * @throws ClassNotFoundException 
 	 * @throws NumberFormatException 
 	 */
-	private static void processFlagRequest(String value) throws UnknownHostException, IOException, InterruptedException, NumberFormatException, ClassNotFoundException {
+	private static void processFlagRequest(String value) throws IOException, InterruptedException, NumberFormatException, ClassNotFoundException {
 		if(value.contains("SYN")) {
 			processSYNRequest(value);
 		} else if(value.contains("DEL")) {
@@ -126,7 +126,7 @@ public class MonitorHTTPServer {
 		}
 	}
 	
-	private static void processSYNRequest(String value) throws UnknownHostException, IOException {
+	private static void processSYNRequest(String value) throws IOException {
 		for(Agent a : agents) {
 			String agentInfo = value.substring(3); // IP Address and port
 			if(a.toString().equals(agentInfo)) {
@@ -138,7 +138,7 @@ public class MonitorHTTPServer {
 		}
 	}
 
-	private static void processDELRequest(String value) throws UnknownHostException, IOException, InterruptedException {
+	private static void processDELRequest(String value) throws IOException, InterruptedException {
 		Agent agentToDelete = null;
 		for(Agent a : agents) {
 			String agentInfo = value.substring(3); // IP Address and port
@@ -181,7 +181,7 @@ public class MonitorHTTPServer {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static void doubleValuesRequestProcess(String request) throws NumberFormatException, UnknownHostException, ClassNotFoundException, IOException, InterruptedException {
+	private static void doubleValuesRequestProcess(String request) throws NumberFormatException, ClassNotFoundException, IOException, InterruptedException {
 		String[] doubleValReq = request.split("&");
 		String timerValue = RequestUtils.getReqValue(doubleValReq[0], RequestUtils.DOUBLE);
 		String agentAddValue = RequestUtils.getReqValue(doubleValReq[1], RequestUtils.SINGLE);

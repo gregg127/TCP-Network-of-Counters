@@ -54,7 +54,7 @@ public class Agent {
 	 * @throws ClassNotFoundException 
 	 * @throws InterruptedException 
 	 */
-	public Agent(long initCounterVal, int introAgentPort) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException {
+	public Agent(long initCounterVal, int introAgentPort) throws IOException, ClassNotFoundException, InterruptedException {
 		serverSocket = new ServerSocket(0);
 		port = serverSocket.getLocalPort();
 		counterValue = initCounterVal;
@@ -159,7 +159,7 @@ public class Agent {
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 */
-	private void sendIPAndPortToOtherAgents() throws UnknownHostException, IOException, InterruptedException {
+	private void sendIPAndPortToOtherAgents() throws IOException, InterruptedException {
 		for(String s : agentsAddressesAndPorts) {
 			String temp[] = s.split(":");
 			String receiverIP = temp[0];
@@ -260,7 +260,7 @@ public class Agent {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public void setCounter(long milliseconds) throws UnknownHostException, IOException, InterruptedException {
+	public void setCounter(long milliseconds) throws IOException, InterruptedException {
 		counterValue = milliseconds;
 	}
 	
